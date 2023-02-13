@@ -2,14 +2,20 @@ import PropTypes from 'prop-types';
 
 export function Searchbar() {
   return (
-    <form class="search-form" id="search-form">
-      <input
-        type="text"
-        name="searchQuery"
-        autocomplete="off"
-        placeholder="Search images and photos"
-      />
-      <button type="submit">Search</button>
-    </form>
+    <header className="searchbar">
+      <form className="form">
+        <button type="submit" className="button">
+          <span className="button-label">Search</span>
+        </button>
+
+        <input
+          className="input"
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+      </form>
+    </header>
   );
 }
