@@ -7,7 +7,6 @@ export function Searchbar() {
         <button type="submit" className="button">
           <span className="button-label">Search</span>
         </button>
-
         <input
           className="input"
           type="text"

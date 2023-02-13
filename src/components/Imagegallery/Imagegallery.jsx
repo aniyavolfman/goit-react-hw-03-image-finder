@@ -5,13 +5,9 @@ export function Imagegallery({ images }) {
     console.log(images)
     return (
       <ul className="gallery">
-        {images.map(({ id, previewURL, tags }) => 
-          (<ImageGalleryItem
-            key={id}
-            pageUrl={previewURL}
-            alt={tags}
-          />)
-        )}
+        {images.map(({ id, webformatURL, tags }) => (
+          <ImageGalleryItem key={id} pageUrl={webformatURL} alt={tags} />
+        ))}
       </ul>
     );
 }
