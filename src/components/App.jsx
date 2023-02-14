@@ -3,6 +3,7 @@ import { Button } from './Button/Button';
 import { Container } from './Container/Container';
 import { Imagegallery } from './Imagegallery/Imagegallery';
 import { Loader } from './Loader/Loader';
+import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import { requestImages } from './services/api';
 
@@ -13,6 +14,7 @@ export class App extends Component {
     error: null,
     page: 1,
     query: null,
+    currentImg: null,
   };
 
   async fetchImages(page, query) {
@@ -34,8 +36,7 @@ export class App extends Component {
   // };
 
   handleButton = () => {
-    this.setState(prevState => (
-      {
+    this.setState(prevState => ({
       page: prevState.page + 1,
     }));
   };
@@ -56,20 +57,24 @@ export class App extends Component {
     ) {
       this.fetchImages(this.state.page, this.state.query);
     }
-
-    
   }
 
+  handleGallery = event => {
+    if (event.target.tagName === 'IMG') {
+      console.log('hello')
+      this.setState({ currentImg: event.target.dataset.largeimg });
+    }
+  };
+  
   render() {
     const { images } = this.state;
     return (
       <Container>
         <Searchbar onSubmit={this.handleSubmit} />
         {this.state.isLoading && <Loader />}
-        <Imagegallery images={images} />
-        {this.state.images.length > 0 && (
-          <Button onClick={this.handleButton} />
-        )}
+        <Imagegallery images={images} onClick={this.handleGallery} />
+        {this.state.images.length > 0 && <Button onClick={this.handleButton} />}
+        <Modal largeImg={this.state.currentImg} />
       </Container>
     );
   }
