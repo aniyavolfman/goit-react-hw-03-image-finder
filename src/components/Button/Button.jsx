@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
+import css from './Button.module.css'
 
-export function Button() {
-    return (
-      <button type="button">
-        Load more
-      </button>
-    );
+export function Button({ onClick }) {
+  return (
+    <button type="button" onClick={onClick} className={css.button}>
+      Load more
+    </button>
+  );
 }

@@ -1,31 +1,57 @@
-import React, { Component } from "react";
-import axios from 'axios';
-import { Button } from "./Button/Button";
-import { Container } from "./Container/Container";
-import { Imagegallery } from "./Imagegallery/Imagegallery";
-import { Searchbar } from "./Searchbar/Searchbar";
-
-axios.defaults.baseURL = 'https://pixabay.com/api';
+import React, { Component } from 'react';
+import { Button } from './Button/Button';
+import { Container } from './Container/Container';
+import { Imagegallery } from './Imagegallery/Imagegallery';
+import { Loader } from './Loader/Loader';
+import { Searchbar } from './Searchbar/Searchbar';
+import { requestImages } from './services/api';
 
 export class App extends Component {
   state = {
     images: [],
+    isLoading: false,
+    error: null,
+    page: 1,
   };
 
-  async componentDidMount() {
-    const response = await axios.get(
-      '?key=32728160-634e7d154d1682a06810c8278&q=cat&page=1&image_type=photo&orientation=horizontal&per_page=12'
-    );
-    this.setState({ images: response.data.hits });
+  async fetchImages(page) {
+    try {
+      this.setState({ isLoading: true });
+
+      const images = await requestImages(page);
+      this.setState({ images: images.hits });
+    } catch (error) {
+      this.setState({ error: error.message });
+    } finally {
+      this.setState({ isLoading: false });
+    }
+  }
+
+  componentDidMount = () => {
+    this.fetchImages(this.state.page);
+  };
+
+  handleButton = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+    }));
+  };
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.page !== this.state.page) {
+      this.fetchImages(this.state.page);
+    }
   }
 
   render() {
+    const { images } = this.state;
     return (
       <Container>
         <Searchbar />
-        <Imagegallery images={this.state.images} />
-        <Button />
+        {this.state.isLoading && <Loader />}
+        <Imagegallery images={images} />
+        <Button onClick={this.handleButton} />
       </Container>
     );
   }
-};
+}
