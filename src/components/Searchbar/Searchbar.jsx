@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import { ImSearch } from 'react-icons/im';
 import css from './Searchbar.module.css';
 
-export function Searchbar() {
+export function Searchbar({ onSubmit }) {
   return (
     <header className={css.searchbar}>
-      <form className={css.form}>
+      <form className={css.form} onSubmit={onSubmit}>
         <button type="submit" className={css.button}>
           <ImSearch />
           <span className={css.buttonLabel}>Search</span>
@@ -22,6 +22,3 @@ export function Searchbar() {
   );
 }
 
-// ImSearch;
-
-// ImSearch;
