@@ -45,6 +45,7 @@ export class App extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    this.setState({images : []})
     const inputValue = event.target.elements[1].value;
     this.setState({
       query: inputValue,
