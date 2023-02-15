@@ -62,7 +62,7 @@ export class App extends Component {
     }
 
     if (prevState.images.length > 0 &&  this.state.currentImg === null) {
-      window.scrollBy({ top: 600, behavior: 'smooth' });
+      window.scrollBy({ top: 1200, behavior: 'smooth' });
     };
   }
   
