@@ -5,7 +5,7 @@ import { Imagegallery } from './Imagegallery/Imagegallery';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
-import { requestImages } from './services/api';
+import { requestImages } from '../services/api';
 
 export class App extends Component {
   state = {
@@ -17,6 +17,19 @@ export class App extends Component {
     currentImg: null,
     per_page: 12,
   };
+
+  componentDidUpdate(_, prevState) {
+    if (
+      prevState.page !== this.state.page ||
+      prevState.query !== this.state.query
+    ) {
+      this.fetchImages(this.state.page, this.state.query, this.state.per_page);
+    }
+
+    if (prevState.images.length > 0 && this.state.currentImg === null) {
+      window.scrollBy({ top: 1200, behavior: 'smooth' });
+    }
+  }
 
   async fetchImages(page, query, per_page) {
     try {
@@ -31,10 +44,6 @@ export class App extends Component {
     } finally {
       this.setState({ isLoading: false });
     }
-  }
-
-  componentDidMount=()=>{
-    window.addEventListener('keydown', this.handleKeyDown);
   }
 
   handleButton = () => {
@@ -53,38 +62,13 @@ export class App extends Component {
     });
   };
 
-  componentDidUpdate(_, prevState) {
-    if (
-      prevState.page !== this.state.page ||
-      prevState.query !== this.state.query
-    ) {
-      this.fetchImages(this.state.page, this.state.query, this.state.per_page);
-    }
-
-    if (prevState.images.length > 0 &&  this.state.currentImg === null) {
-      window.scrollBy({ top: 1200, behavior: 'smooth' });
-    };
-  }
-  
   handleGallery = event => {
-    if (event.target.tagName === 'IMG') {
-      this.setState({ currentImg: event.target.dataset.largeimg });
-    }
+    this.setState({ currentImg: event.target.dataset.largeimg });
   };
 
-  handleModal = event => {
-    if (event.target === event.currentTarget) {
-      this.setState({ currentImg: null });
-    }
+  closeModal = () => {
+    this.setState({ currentImg: null });
   };
-
-  handleKeyDown = event => {
-    if (event.code === 'Escape') { this.setState({ currentImg: null }); };
-  }
-   
-  componentWillUnmount = () => {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
 
   render() {
     const { images } = this.state;
@@ -99,6 +83,7 @@ export class App extends Component {
             largeImg={this.state.currentImg}
             onClose={this.handleModal}
             alt={this.state.query}
+            closeModal={this.closeModal}
           />
         )}
       </Container>

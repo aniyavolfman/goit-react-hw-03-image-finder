@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import css from './ImageGalleryItem.module.css'
 
-export function ImageGalleryItem({ pageUrl, alt, datalargeimg }) {
-
+export function ImageGalleryItem({ pageUrl, alt, datalargeimg, onClick }) {
   return (
-    <li className={css.galleryItem}>
+    <li className={css.galleryItem} onClick={onClick}>
       <img
         src={pageUrl}
         alt={alt}
@@ -19,4 +18,5 @@ export function ImageGalleryItem({ pageUrl, alt, datalargeimg }) {
    pageUrl: PropTypes.string.isRequired,
    alt: PropTypes.string.isRequired,
    datalargeimg: PropTypes.string.isRequired,
+   onClick: PropTypes.func,
  };

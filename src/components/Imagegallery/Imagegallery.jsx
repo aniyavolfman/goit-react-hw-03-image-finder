@@ -4,13 +4,14 @@ import css from './ImageGallery.module.css'
 
 export function Imagegallery({ images, onClick }) {
     return (
-      <ul className={css.gallery} onClick={onClick}>
-        {images.map(({ id, webformatURL, tags, largeImageURL }) => (
+      <ul className={css.gallery}>
+        {images.map(({ id, webformatURL, tags, largeImageURL}) => (
           <ImageGalleryItem
             key={id}
             pageUrl={webformatURL}
             alt={tags}
             datalargeimg={largeImageURL}
+            onClick={onClick}
           />
         ))}
       </ul>
@@ -24,6 +25,7 @@ Imagegallery.propTypes = {
       webformatURL: PropTypes.string,
       tags: PropTypes.string.isRequired,
       largeImageURL: PropTypes.string.isRequired,
+      onClick: PropTypes.func,
     })
   ),
   onClick: PropTypes.func.isRequired,
