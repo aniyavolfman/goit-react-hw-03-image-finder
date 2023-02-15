@@ -16,6 +16,7 @@ export class App extends Component {
     query: null,
     currentImg: null,
     per_page: 12,
+    totalImages: 0,
   };
 
   componentDidUpdate(_, prevState) {
@@ -38,6 +39,7 @@ export class App extends Component {
       const images = await requestImages(page, query, per_page);
       this.setState({
         images: [...this.state.images, ...images.hits],
+        totalImages: images.total,
       });
     } catch (error) {
       this.setState({ error: error.message });
@@ -72,12 +74,16 @@ export class App extends Component {
 
   render() {
     const { images } = this.state;
+
     return (
       <Container>
         <Searchbar onSubmit={this.handleSubmit} />
         {this.state.isLoading && <Loader />}
         <Imagegallery images={images} onClick={this.handleGallery} />
-        {this.state.images.length > 0 && <Button onClick={this.handleButton} />}
+        {(this.state.images.length > 0 &&
+          this.state.page < (Math.ceil(this.state.totalImages / this.state.per_page))) && (
+            <Button onClick={this.handleButton} />
+          )}
         {this.state.currentImg && (
           <Modal
             largeImg={this.state.currentImg}
