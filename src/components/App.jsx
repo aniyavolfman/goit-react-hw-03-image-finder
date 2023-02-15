@@ -45,7 +45,7 @@ export class App extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.setState({images : []})
+    this.setState({ images: [] });
     const inputValue = event.target.elements[1].value;
     this.setState({
       query: inputValue,
@@ -60,8 +60,12 @@ export class App extends Component {
     ) {
       this.fetchImages(this.state.page, this.state.query, this.state.per_page);
     }
-  }
 
+    if (prevState.images.length > 0 &&  this.state.currentImg === null) {
+      window.scrollBy({ top: 600, behavior: 'smooth' });
+    };
+  }
+  
   handleGallery = event => {
     if (event.target.tagName === 'IMG') {
       this.setState({ currentImg: event.target.dataset.largeimg });
