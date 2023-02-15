@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import css from './Modal.module.css';
 
 export function Modal({ largeImg, onClose, alt }) {
@@ -9,3 +10,9 @@ export function Modal({ largeImg, onClose, alt }) {
     </div>
   );
 }
+
+ Modal.propTypes = {
+   largeImg: PropTypes.string.isRequired,
+   onClose: PropTypes.func.isRequired,
+   alt: PropTypes.string.isRequired,
+ };

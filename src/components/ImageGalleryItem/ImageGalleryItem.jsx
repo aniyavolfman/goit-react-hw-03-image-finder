@@ -14,3 +14,9 @@ export function ImageGalleryItem({ pageUrl, alt, datalargeimg }) {
     </li>
   );
 }
+
+ ImageGalleryItem.propTypes = {
+   pageUrl: PropTypes.string.isRequired,
+   alt: PropTypes.string.isRequired,
+   datalargeimg: PropTypes.string.isRequired,
+ };
