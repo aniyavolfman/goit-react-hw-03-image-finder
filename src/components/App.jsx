@@ -15,14 +15,17 @@ export class App extends Component {
     page: 1,
     query: null,
     currentImg: null,
+    per_page: 12,
   };
 
-  async fetchImages(page, query) {
+  async fetchImages(page, query, per_page) {
     try {
       this.setState({ isLoading: true });
 
-      const images = await requestImages(page, query);
-      this.setState({ images: images.hits });
+      const images = await requestImages(page, query, per_page);
+      this.setState({
+        images: [...this.state.images, ...images.hits],
+      });
     } catch (error) {
       this.setState({ error: error.message });
     } finally {
@@ -30,10 +33,9 @@ export class App extends Component {
     }
   }
 
-  // componentDidMount = () => {
-  //   this.fetchImages(this.state.page, this.state.query);
-
-  // };
+  componentDidMount=()=>{
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
 
   handleButton = () => {
     this.setState(prevState => ({
@@ -55,17 +57,30 @@ export class App extends Component {
       prevState.page !== this.state.page ||
       prevState.query !== this.state.query
     ) {
-      this.fetchImages(this.state.page, this.state.query);
+      this.fetchImages(this.state.page, this.state.query, this.state.per_page);
     }
   }
 
   handleGallery = event => {
     if (event.target.tagName === 'IMG') {
-      console.log('hello')
       this.setState({ currentImg: event.target.dataset.largeimg });
     }
   };
-  
+
+  handleModal = event => {
+    if (event.target === event.currentTarget) {
+      this.setState({ currentImg: null });
+    }
+  };
+
+  handleKeyDown = event => {
+    if (event.code === 'Escape') { this.setState({ currentImg: null }); };
+  }
+   
+  componentWillUnmount = () => {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
   render() {
     const { images } = this.state;
     return (
@@ -74,7 +89,13 @@ export class App extends Component {
         {this.state.isLoading && <Loader />}
         <Imagegallery images={images} onClick={this.handleGallery} />
         {this.state.images.length > 0 && <Button onClick={this.handleButton} />}
-        <Modal largeImg={this.state.currentImg} />
+        {this.state.currentImg && (
+          <Modal
+            largeImg={this.state.currentImg}
+            onClose={this.handleModal}
+            alt={this.state.query}
+          />
+        )}
       </Container>
     );
   }
